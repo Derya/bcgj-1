@@ -19,7 +19,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         handleControls();
     }
@@ -46,7 +46,11 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         transform.Rotate(pitch.getCurrentValue(), yaw.getCurrentValue(), roll.getCurrentValue());
 
         //float forwardVel = transform.InverseTransformDirection(rigidBody.velocity).z;
-        rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
+        if (Input.GetKey("left shift"))
+        {
+
+            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
+        }
     }
 
 
