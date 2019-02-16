@@ -7,7 +7,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
     AcceleratableValue pitch = new AcceleratableValue(1.0f, 0.5f);
     AcceleratableValue yaw = new AcceleratableValue(1.0f, 0.5f);
-    AcceleratableValue throttle = new AcceleratableValue(1.0f, 0.5f);
+    AcceleratableValue throttle = new AcceleratableValue(2.0f, 1.0f);
 
     void Start()
     {
@@ -19,16 +19,6 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         handleControls();
     }
 
-
-    float curShipSpeed = 0.0f;
-    float mouse_rotate = 0.5f;
-    float dist_fr_ship = 2.85f;
-    int step = 2;
-    float current_speed = 0.0f;
-    float maxSpeed = 100f;
-    int agility = 30;
-
-   
 
     void handleControls()
     {
@@ -56,6 +46,17 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         else yaw.equalize(deltaTime);
 
         transform.Rotate(pitch.getCurrentValue(), yaw.getCurrentValue(), roll.getCurrentValue());
+
+        if (Input.GetKey("left shift"))
+        {
+            throttle.increase(deltaTime);
+        } 
+        else if (Input.GetKey("left ctrl"))
+        {
+            throttle.decrease(deltaTime);
+        }
+
+        transform.position += transform.TransformDirection(Vector3.forward) * throttle.getCurrentValue() * deltaTime;
 
         //if ((Input.GetKey("up") || Input.GetKey("w")) && (current_speed < maxSpeed))
         //{
