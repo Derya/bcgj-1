@@ -8,12 +8,14 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     [SerializeField]
     float thrustFactor;
     [SerializeField]
-    GameObject indicator;
+    GameObject vel_indicator;
+    [SerializeField]
+    float fastRotateSpeed;
     [SerializeField]
     GameObject textGameObjec;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
-    readonly AcceleratableValue pitch = new AcceleratableValue(1.0f, 0.5f);
+    readonly AcceleratableValue pitch = new AcceleratableValue(1.5f, 0.7f);
     readonly AcceleratableValue yaw = new AcceleratableValue(1.0f, 0.5f);
 
     Rigidbody rigidBody;
@@ -25,19 +27,67 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         velocity_text = textGameObjec.GetComponent<TextMeshPro>();
     }
 
-    void FixedUpdate()
-    {
-        handleControls();
-    }
-
     void Update()
     {
         updateIndicator();
     }
 
-    void handleControls()
+    float last_s_up = -100;
+    Quaternion? rotateTarget = null;
+
+    void rotateTowardsTarget(float deltaTime)
     {
-        var deltaTime = Time.deltaTime;
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotateTarget.Value, deltaTime * fastRotateSpeed);
+
+        if (Quaternion.Angle(transform.rotation, rotateTarget.Value) < 1)
+        {
+            rotateTarget = null;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        var deltaTime = Time.fixedDeltaTime;
+
+        if (rotateTarget.HasValue)
+        {
+            rotateTowardsTarget(deltaTime);
+        }
+        else
+        {
+            //if (Input.GetKeyUp("s"))
+            //{
+            //    if (Time.time - last_s_up < 0.5f)
+            //    {
+            //        rotateTarget = Quaternion.LookRotation(-transform.forward, Vector3.up);
+
+            //        last_s_up = -100;
+            //    }
+
+            //    last_s_up = Time.time;
+            //}
+
+            handleStandardRotations();
+        }
+
+        if (Input.GetKey("left shift"))
+        {
+            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
+        }
+
+        if (Input.GetKey("space"))
+        {
+            rigidBody.drag = 1.0f;
+        }
+        else
+        {
+            rigidBody.drag = 0f;
+        }
+    }
+
+    void handleStandardRotations()
+    {
+        var deltaTime = Time.fixedDeltaTime;
 
         var rollRight = Input.GetKey("d");
         var rollLeft = Input.GetKey("a");
@@ -55,20 +105,13 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         yaw.fromBools(yawLeft, yawRight, deltaTime);
 
         transform.Rotate(pitch.getCurrentValue(), yaw.getCurrentValue(), roll.getCurrentValue());
-
-        //float forwardVel = transform.InverseTransformDirection(rigidBody.velocity).z;
-        if (Input.GetKey("left shift"))
-        {
-
-            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
-        }
     }
 
     void updateIndicator()
     {
-        var basePosition = indicator.transform.position;
+        var basePosition = vel_indicator.transform.position;
         var velocityDirection = rigidBody.velocity.normalized;
-        indicator.transform.LookAt(velocityDirection + basePosition);
+        vel_indicator.transform.LookAt(velocityDirection + basePosition);
 
         float speed = rigidBody.velocity.magnitude;
         float angle = Vector3.Angle(velocityDirection, transform.forward);
@@ -84,6 +127,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             "\nangle points: " + noDecimalFormat(anglePoints) +
             "\nscore: " + noDecimalFormat(score)
         );
+
+        vel_indicator.SetActive(speed >= 0.1);
     }
 
     string noDecimalFormat(float x)
