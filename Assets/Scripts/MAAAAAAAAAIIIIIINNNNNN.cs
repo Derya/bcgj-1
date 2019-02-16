@@ -6,6 +6,10 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 {
     [SerializeField]
     float thrustFactor;
+    [SerializeField]
+    GameObject indicator;
+    [SerializeField]
+    GameObject velocity_text;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
     readonly AcceleratableValue pitch = new AcceleratableValue(1.0f, 0.5f);
@@ -15,13 +19,18 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     void Start()
     {
-        rigidBody = GetComponentInChildren<Rigidbody>();
         rigidBody = GetComponent<Rigidbody>();
+        updateIndicator();
     }
 
     void FixedUpdate()
     {
         handleControls();
+    }
+
+    void Update()
+    {
+        updateIndicator();
     }
 
     void handleControls()
@@ -53,6 +62,14 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         }
     }
 
+    void updateIndicator()
+    {
+        var basePosition = indicator.transform.position;
+        var velocityDirection = rigidBody.velocity.normalized;
+        indicator.transform.LookAt(velocityDirection + basePosition);
+
+
+    }
 
 
 }
