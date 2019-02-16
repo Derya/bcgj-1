@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 62295f740f0b0a94dbf7d96d27e4402d
+guid: d509dcad2e8a4ca43839c9026cf36ca2
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,7 +8,7 @@ ModelImporter:
     2100000: No Name
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cone
+    4300000: Sphere
   externalObjects: {}
   materials:
     importMaterials: 0
@@ -43,7 +43,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    useSRGBMaterialColor: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
