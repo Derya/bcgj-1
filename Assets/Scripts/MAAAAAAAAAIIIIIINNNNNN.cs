@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 {
@@ -9,18 +10,19 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     [SerializeField]
     GameObject indicator;
     [SerializeField]
-    GameObject velocity_text;
+    GameObject textGameObjec;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
     readonly AcceleratableValue pitch = new AcceleratableValue(1.0f, 0.5f);
     readonly AcceleratableValue yaw = new AcceleratableValue(1.0f, 0.5f);
 
     Rigidbody rigidBody;
+    TextMeshPro velocity_text;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
-        updateIndicator();
+        velocity_text = textGameObjec.GetComponent<TextMeshPro>();
     }
 
     void FixedUpdate()
@@ -68,8 +70,33 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         var velocityDirection = rigidBody.velocity.normalized;
         indicator.transform.LookAt(velocityDirection + basePosition);
 
+        float speed = rigidBody.velocity.magnitude;
+        float angle = Vector3.Angle(velocityDirection, transform.forward);
 
+        float velocityPoints = Mathf.Lerp(0, 10, Mathf.Clamp(speed / 20.0f, 0, 1));
+        float anglePoints = Mathf.Lerp(0, 10, Mathf.Clamp(angle / 90.0f, 0, 1));
+        float score = velocityPoints * anglePoints;
+
+        velocity_text.SetText(
+            noDecimalFormat(speed) + " m/s" + 
+            "\n" + noDecimalFormat(angle) + " degrees" +
+            "\nvelocity points: " + noDecimalFormat(velocityPoints) +
+            "\nangle points: " + noDecimalFormat(anglePoints) +
+            "\nscore: " + noDecimalFormat(score)
+        );
     }
 
+    string noDecimalFormat(float x)
+    {
+        string ret = x.ToString("#");
+        if (ret.Length < 1)
+        {
+            return "0";
+        }
+        else
+        {
+            return ret;
+        }
+    }
 
 }

@@ -163,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrustFactor: 10
   indicator: {fileID: 148460561061771857}
-  velocity_text: {fileID: 8144606156264175745}
+  textGameObjec: {fileID: 8144606156264175745}
 --- !u!54 &7642021073402199151
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 6
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -454,7 +454,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -26.091106, w: -16.709898}
   m_textInfo:
     textComponent: {fileID: 2662315767276740316}
     characterCount: 25
@@ -504,7 +504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 62295f740f0b0a94dbf7d96d27e4402d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 62295f740f0b0a94dbf7d96d27e4402d, type: 3}
       propertyPath: m_LocalRotation.x
