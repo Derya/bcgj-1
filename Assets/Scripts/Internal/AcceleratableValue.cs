@@ -20,6 +20,13 @@ public class AcceleratableValue
         return current;
     }
 
+    public void fromBools(bool shouldDecrease, bool shouldIncrease, float deltaTime)
+    {
+        if (shouldDecrease && !shouldIncrease) this.decrease(deltaTime);
+        else if (shouldIncrease && !shouldDecrease) this.increase(deltaTime);
+        else this.equalize(deltaTime);
+    }
+
     public void increase(float deltaTime)
     {
         float maxDelta = deltaTime * maxDeltaPerSec;
