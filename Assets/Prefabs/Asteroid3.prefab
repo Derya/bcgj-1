@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 1865176117384136894}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Asteroid3
   m_TagString: ASTEROID
   m_Icon: {fileID: 0}
