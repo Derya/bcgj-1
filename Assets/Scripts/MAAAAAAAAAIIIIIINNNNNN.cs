@@ -14,6 +14,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     [SerializeField]
     GameObject textGameObjec;
     [SerializeField]
+    GameObject epicTextGameObjec;
+    [SerializeField]
     GameObject cameraGameObject;
 
     [SerializeField]
@@ -29,18 +31,30 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     Rigidbody rigidBody;
     TextMeshPro velocity_text;
+    TextMeshPro epic_text;
     ParticleSystem particles;
+    Vector3 epicBasePos;
+    float jitterAmount = 0.1f;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         velocity_text = textGameObjec.GetComponent<TextMeshPro>();
+        epic_text = epicTextGameObjec.GetComponent<TextMeshPro>();
         particles = GetComponentInChildren<ParticleSystem>();
+
+        epicBasePos = epicTextGameObjec.transform.localPosition;
     }
 
     void Update()
     {
         updateIndicator();
+
+        var newPos = epicBasePos;
+        newPos.x = newPos.x + Random.Range(-jitterAmount, jitterAmount);
+        newPos.y = newPos.y + Random.Range(-jitterAmount, jitterAmount);
+        newPos.z = newPos.z + Random.Range(-jitterAmount, jitterAmount);
+        epicTextGameObjec.transform.localPosition = newPos;
     }
 
     float last_s_up = -100;
@@ -132,6 +146,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         }
     }
 
+
+
     void updateIndicator()
     {
         var basePosition = vel_indicator.transform.position;
@@ -155,6 +171,33 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         layer1.volume = Mathf.Clamp01(score / 10);
         layer2.volume = Mathf.Clamp01(score / 25);
         layer3.volume = Mathf.Clamp01(score / 50);
+
+        jitterAmount = Mathf.Lerp(0, 0.1f, (score - 30) / 70);
+
+        if (score > 90)
+        {
+            epic_text.text = "AAAAAAAAAAAAAAAAAA";
+        }
+        else if (score > 70)
+        {
+            epic_text.text = "INCOMPREHENSIBLE DRIFT";
+        }
+        else if (score > 50)
+        {
+            epic_text.text = "HUGE DRIFT";
+        }
+        else if (score > 30)
+        {
+            epic_text.text = "BIG DRIFT";
+        }
+        else if (score > 10)
+        {
+            epic_text.text = "NICE DRIFT";
+        }
+        else
+        {
+            epic_text.text = "";
+        }
 
         velocity_text.SetText(
             noDecimalFormat(speed) + " m/s" + 
