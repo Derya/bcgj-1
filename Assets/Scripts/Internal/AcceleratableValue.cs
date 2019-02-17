@@ -29,46 +29,61 @@ public class AcceleratableValue
 
     public void increase(float deltaTime)
     {
-        float maxDelta = deltaTime * maxDeltaPerSec;
-
-        current += Mathf.Lerp(0, 2 * maxDelta, 1);
-        if (current > maxMagnitude)
-        {
-            current = maxMagnitude;
-        }
+        current = maxMagnitude;
     }
 
     public void decrease(float deltaTime)
     {
-        float maxDelta = deltaTime * maxDeltaPerSec;
-
-        current += Mathf.Lerp(0, -2 * maxDelta, 1);
-        if (current < -maxMagnitude)
-        {
-            current = -maxMagnitude;
-        }
+        current = -maxMagnitude;
     }
 
     public void equalize(float deltaTime)
     {
-        float maxDelta = deltaTime * maxDeltaPerSec;
-
-        if (current > 0)
-        {
-            current -= maxDelta;
-            if (current < 0)
-            {
-                current = 0;
-            }
-        }
-        else
-        {
-            current += maxDelta;
-            if (current > 0)
-            {
-                current = 0;
-            }
-        }
+        current = 0;
     }
+
+    //public void increase(float deltaTime)
+    //{
+    //    float maxDelta = deltaTime * maxDeltaPerSec;
+
+    //    current += Mathf.Lerp(0, 2 * maxDelta, 1);
+    //    if (current > maxMagnitude)
+    //    {
+    //        current = maxMagnitude;
+    //    }
+    //}
+
+    //public void decrease(float deltaTime)
+    //{
+    //    float maxDelta = deltaTime * maxDeltaPerSec;
+
+    //    current += Mathf.Lerp(0, -2 * maxDelta, 1);
+    //    if (current < -maxMagnitude)
+    //    {
+    //        current = -maxMagnitude;
+    //    }
+    //}
+
+    //public void equalize(float deltaTime)
+    //{
+    //    float maxDelta = deltaTime * maxDeltaPerSec;
+
+    //    if (current > 0)
+    //    {
+    //        current -= maxDelta;
+    //        if (current < 0)
+    //        {
+    //            current = 0;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        current += maxDelta;
+    //        if (current > 0)
+    //        {
+    //            current = 0;
+    //        }
+    //    }
+    //}
 
 }
