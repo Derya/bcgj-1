@@ -19,6 +19,25 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     GameObject cameraGameObject;
 
     [SerializeField]
+    GameObject bunBottomDisplay;
+    [SerializeField]
+    GameObject cheeseDisplay;
+    [SerializeField]
+    GameObject pattyDisplay;
+    [SerializeField]
+    GameObject lettuceDisplay;
+    [SerializeField]
+    GameObject bunTopDisplay;
+
+    int hasBunBottom;
+    int hasCheese;
+    int hasPatty;
+    int hasLettuce;
+    int hasBunTop;
+
+    bool won = false;
+
+    [SerializeField]
     AudioSource layer1;
     [SerializeField]
     AudioSource layer2;
@@ -26,6 +45,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     AudioSource layer3;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
+
     readonly AcceleratableValue pitch = new AcceleratableValue(1.5f, 0.7f);
     readonly AcceleratableValue yaw = new AcceleratableValue(1.0f, 0.5f);
 
@@ -44,6 +64,12 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         particles = GetComponentInChildren<ParticleSystem>();
 
         epicBasePos = epicTextGameObjec.transform.localPosition;
+
+        bunBottomDisplay.SetActive(false);
+        cheeseDisplay.SetActive(false);
+        pattyDisplay.SetActive(false);
+        lettuceDisplay.SetActive(false);
+        bunTopDisplay.SetActive(false);
     }
 
     void Update()
@@ -164,7 +190,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
         emissionModule.rateOverTime = Mathf.Lerp(0, 100, (speed - 5) / 15);
 
-        float velocityPoints = Mathf.Lerp(0, 10, Mathf.Clamp(speed / 20.0f, 0, 1));
+        float velocityPoints = Mathf.Lerp(0, 10, Mathf.Clamp(speed / 40.0f, 0, 1));
         float anglePoints = Mathf.Lerp(0, 10, Mathf.Clamp(angle / 90.0f, 0, 1));
         float score = velocityPoints * anglePoints;
 
@@ -174,29 +200,32 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
         jitterAmount = Mathf.Lerp(0, 0.1f, (score - 30) / 70);
 
-        if (score > 90)
+        if (!won)
         {
-            epic_text.text = "AAAAAAAAAAAAAAAAAA";
-        }
-        else if (score > 70)
-        {
-            epic_text.text = "INCOMPREHENSIBLE DRIFT";
-        }
-        else if (score > 50)
-        {
-            epic_text.text = "HUGE DRIFT";
-        }
-        else if (score > 30)
-        {
-            epic_text.text = "BIG DRIFT";
-        }
-        else if (score > 10)
-        {
-            epic_text.text = "NICE DRIFT";
-        }
-        else
-        {
-            epic_text.text = "";
+            if (score > 90)
+            {
+                epic_text.text = "AAAAAAAAAAAAAAAAAA";
+            }
+            else if (score > 70)
+            {
+                epic_text.text = "INCOMPREHENSIBLE DRIFT";
+            }
+            else if (score > 50)
+            {
+                epic_text.text = "HUGE DRIFT";
+            }
+            else if (score > 30)
+            {
+                epic_text.text = "BIG DRIFT";
+            }
+            else if (score > 10)
+            {
+                epic_text.text = "NICE DRIFT";
+            }
+            else
+            {
+                epic_text.text = "";
+            }
         }
 
         velocity_text.SetText(
@@ -228,6 +257,43 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         if (rigidBody.velocity.magnitude > 3)
         {
             Debug.LogError("YOU DIED");
+        }
+    }
+
+    public void pickupTarget(Target target)
+    {
+        switch(target)
+        {
+            case Target.bottombun:
+                hasBunBottom = 1;
+                bunBottomDisplay.SetActive(true);
+                break;
+
+            case Target.cheese:
+                hasCheese = 1;
+                cheeseDisplay.SetActive(true);
+                break;
+
+            case Target.patty:
+                hasPatty = 1;
+                pattyDisplay.SetActive(true);
+                break;
+
+            case Target.lettuce:
+                hasLettuce = 1;
+                lettuceDisplay.SetActive(true);
+                break;
+
+            case Target.topbun:
+                hasBunTop = 1;
+                bunTopDisplay.SetActive(true);
+                break;
+        }
+
+        if (hasBunBottom + hasCheese + hasLettuce + hasPatty + hasBunTop == 5)
+        {
+            won = true;
+            epic_text.text = "YOU WIN";
         }
     }
 
