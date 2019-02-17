@@ -105,6 +105,13 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         yaw.fromBools(yawLeft, yawRight, deltaTime);
 
         transform.Rotate(pitch.getCurrentValue(), yaw.getCurrentValue(), roll.getCurrentValue());
+
+        if (transform.position.y < -8)
+        {
+            var updated = transform.position;
+            updated.y = -8;
+            transform.position = updated;
+        }
     }
 
     void updateIndicator()
