@@ -13,6 +13,15 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     float fastRotateSpeed;
     [SerializeField]
     GameObject textGameObjec;
+    [SerializeField]
+    GameObject cameraGameObject;
+
+    [SerializeField]
+    AudioSource layer1;
+    [SerializeField]
+    AudioSource layer2;
+    [SerializeField]
+    AudioSource layer3;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
     readonly AcceleratableValue pitch = new AcceleratableValue(1.5f, 0.7f);
@@ -20,11 +29,13 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     Rigidbody rigidBody;
     TextMeshPro velocity_text;
+    ParticleSystem particles;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         velocity_text = textGameObjec.GetComponent<TextMeshPro>();
+        particles = GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
@@ -127,12 +138,23 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         var velocityDirection = rigidBody.velocity.normalized;
         vel_indicator.transform.LookAt(velocityDirection + basePosition);
 
+        particles.transform.position = cameraGameObject.transform.position + (velocityDirection * 20);
+        particles.transform.LookAt(cameraGameObject.transform);
+
         float speed = rigidBody.velocity.magnitude;
         float angle = Vector3.Angle(velocityDirection, transform.forward);
+
+        var emissionModule = particles.emission;
+
+        emissionModule.rateOverTime = Mathf.Lerp(0, 100, (speed - 5) / 15);
 
         float velocityPoints = Mathf.Lerp(0, 10, Mathf.Clamp(speed / 20.0f, 0, 1));
         float anglePoints = Mathf.Lerp(0, 10, Mathf.Clamp(angle / 90.0f, 0, 1));
         float score = velocityPoints * anglePoints;
+
+        layer1.volume = Mathf.Clamp01(score / 10);
+        layer2.volume = Mathf.Clamp01(score / 25);
+        layer3.volume = Mathf.Clamp01(score / 50);
 
         velocity_text.SetText(
             noDecimalFormat(speed) + " m/s" + 
