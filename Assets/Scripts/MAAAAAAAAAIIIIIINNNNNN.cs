@@ -19,6 +19,17 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     GameObject cameraGameObject;
 
     [SerializeField]
+    GameObject bunBottom;
+    [SerializeField]
+    GameObject cheese;
+    [SerializeField]
+    GameObject patty;
+    [SerializeField]
+    GameObject lettuce;
+    [SerializeField]
+    GameObject bunTop;
+
+    [SerializeField]
     GameObject bunBottomDisplay;
     [SerializeField]
     GameObject cheeseDisplay;
@@ -36,6 +47,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     int hasBunTop;
 
     bool won = false;
+    GameObject currTarget = null;
 
     [SerializeField]
     AudioSource layer1;
@@ -45,7 +57,6 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     AudioSource layer3;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
-
     readonly AcceleratableValue pitch = new AcceleratableValue(1.5f, 0.7f);
     readonly AcceleratableValue yaw = new AcceleratableValue(1.0f, 0.5f);
 
@@ -58,6 +69,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     void Start()
     {
+        currTarget = bunBottom;
+
         rigidBody = GetComponent<Rigidbody>();
         velocity_text = textGameObjec.GetComponent<TextMeshPro>();
         epic_text = epicTextGameObjec.GetComponent<TextMeshPro>();
@@ -178,7 +191,6 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     {
         var basePosition = vel_indicator.transform.position;
         var velocityDirection = rigidBody.velocity.normalized;
-        vel_indicator.transform.LookAt(velocityDirection + basePosition);
 
         particles.transform.position = cameraGameObject.transform.position + (velocityDirection * 20);
         particles.transform.LookAt(cameraGameObject.transform);
@@ -236,7 +248,19 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             "\nscore: " + noDecimalFormat(score)
         );
 
-        vel_indicator.SetActive(speed >= 0.1);
+        //vel_indicator.transform.LookAt(velocityDirection + basePosition);
+
+        if (currTarget == null)
+        {
+            vel_indicator.SetActive(false);
+        }
+        else
+        {
+            vel_indicator.SetActive(true);
+            vel_indicator.transform.LookAt(currTarget.transform);
+        }
+
+        //vel_indicator.SetActive(speed >= 0.1);
     }
 
     string noDecimalFormat(float x)
@@ -257,6 +281,18 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         if (rigidBody.velocity.magnitude > 3)
         {
             Debug.LogError("YOU DIED");
+        }
+    }
+
+    void updateNextTarget() {
+        if (hasCheese == 0) {
+            currTarget = cheese;
+        } else if (hasPatty == 0) {
+            currTarget = patty;
+        } else if (hasLettuce == 0) {
+            currTarget = lettuce;
+        } else if (hasBunTop == 0) {
+            currTarget = bunTop;
         }
     }
 
@@ -294,6 +330,11 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         {
             won = true;
             epic_text.text = "YOU WIN";
+            currTarget = null;
+        }
+        else
+        {
+            updateNextTarget();
         }
     }
 
