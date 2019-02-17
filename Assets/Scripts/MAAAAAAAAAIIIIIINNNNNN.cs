@@ -49,6 +49,20 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     {
         var deltaTime = Time.fixedDeltaTime;
 
+        if (Input.GetKey("left shift"))
+        {
+            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
+        }
+
+        if (Input.GetKey("space"))
+        {
+            rigidBody.drag = 1.0f;
+        }
+        else
+        {
+            rigidBody.drag = 0f;
+        }
+
         if (rotateTarget.HasValue)
         {
             rotateTowardsTarget(deltaTime);
@@ -68,20 +82,6 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             //}
 
             handleStandardRotations();
-        }
-
-        if (Input.GetKey("left shift"))
-        {
-            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
-        }
-
-        if (Input.GetKey("space"))
-        {
-            rigidBody.drag = 1.0f;
-        }
-        else
-        {
-            rigidBody.drag = 0f;
         }
     }
 
@@ -106,11 +106,18 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
         transform.Rotate(pitch.getCurrentValue(), yaw.getCurrentValue(), roll.getCurrentValue());
 
-        if (transform.position.y < -8)
+        if (transform.position.y < -7)
         {
-            var updated = transform.position;
-            updated.y = -8;
-            transform.position = updated;
+            var updatedPos = transform.position;
+            var updatedVel = rigidBody.velocity;
+            updatedPos.y = -7;
+            if (updatedVel.y < 1)
+            {
+                updatedVel.y = 1;
+            }
+
+            transform.position = updatedPos;
+            rigidBody.velocity = updatedVel;
         }
     }
 
@@ -148,6 +155,14 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         else
         {
             return ret;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (rigidBody.velocity.magnitude > 3)
+        {
+            Debug.LogError("YOU DIED");
         }
     }
 
