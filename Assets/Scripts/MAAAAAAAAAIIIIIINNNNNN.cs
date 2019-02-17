@@ -17,6 +17,10 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     GameObject epicTextGameObjec;
     [SerializeField]
     GameObject cameraGameObject;
+    [SerializeField]
+    GameObject particlesGameObject;
+    [SerializeField]
+    GameObject otherParticlesGameObject;
 
     [SerializeField]
     GameObject bunBottom;
@@ -55,6 +59,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     AudioSource layer2;
     [SerializeField]
     AudioSource layer3;
+    [SerializeField]
+    AudioSource layer3_LYRICS;
 
     readonly AcceleratableValue roll = new AcceleratableValue(3.0f, 0.5f);
     readonly AcceleratableValue pitch = new AcceleratableValue(1.5f, 0.7f);
@@ -64,8 +70,13 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     TextMeshPro velocity_text;
     TextMeshPro epic_text;
     ParticleSystem particles;
+    ParticleSystem otherParticles;
     Vector3 epicBasePos;
     float jitterAmount = 0.1f;
+
+    double TOTAL_SCORE = 0;
+    double TOTAL_TIME = 0;
+    double FINAL_SCORE;
 
     void Start()
     {
@@ -74,7 +85,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         velocity_text = textGameObjec.GetComponent<TextMeshPro>();
         epic_text = epicTextGameObjec.GetComponent<TextMeshPro>();
-        particles = GetComponentInChildren<ParticleSystem>();
+        particles = particlesGameObject.GetComponent<ParticleSystem>();
+        otherParticles = otherParticlesGameObject.GetComponent<ParticleSystem>();
 
         epicBasePos = epicTextGameObjec.transform.localPosition;
 
@@ -113,9 +125,15 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     {
         var deltaTime = Time.fixedDeltaTime;
 
+        var emissionSubsystem = otherParticles.emission;
         if (Input.GetKey("left shift"))
         {
             rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
+            emissionSubsystem.rateOverTime = 100;
+        }
+        else
+        {
+            emissionSubsystem.rateOverTime = 0;
         }
 
         if (Input.GetKey("space"))
@@ -185,8 +203,6 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         }
     }
 
-
-
     void updateIndicator()
     {
         var basePosition = vel_indicator.transform.position;
@@ -206,9 +222,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         float anglePoints = Mathf.Lerp(0, 10, Mathf.Clamp(angle / 90.0f, 0, 1));
         float score = velocityPoints * anglePoints;
 
-        layer1.volume = Mathf.Clamp01(score / 10);
-        layer2.volume = Mathf.Clamp01(score / 25);
-        layer3.volume = Mathf.Clamp01(score / 50);
+        TOTAL_SCORE += score * Time.deltaTime;
+        TOTAL_TIME += Time.deltaTime;
 
         jitterAmount = Mathf.Lerp(0, 0.1f, (score - 30) / 70);
 
@@ -238,6 +253,27 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             {
                 epic_text.text = "";
             }
+
+            layer1.volume = Mathf.Clamp01(score / 10);
+            layer2.volume = Mathf.Clamp01(score / 25);
+            layer3.volume = Mathf.Clamp01(score / 50);
+
+            if (score >= 90)
+            {
+                layer3.volume = 0;
+                layer3_LYRICS.volume = 1;
+            }
+            else
+            {
+                layer3_LYRICS.volume = 0;
+            }
+        }
+        else
+        {
+            layer1.volume = 1;
+            layer2.volume = 1;
+            layer3.volume = 0;
+            layer3_LYRICS.volume = 1;
         }
 
         velocity_text.SetText(
@@ -329,8 +365,9 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         if (hasBunBottom + hasCheese + hasLettuce + hasPatty + hasBunTop == 5)
         {
             won = true;
-            epic_text.text = "YOU WIN";
             currTarget = null;
+            FINAL_SCORE = (TOTAL_SCORE / TOTAL_TIME) + Mathf.Clamp((60f - (float) TOTAL_TIME), 0, 60);
+            epic_text.text = "YOU WIN! SCORE: " + FINAL_SCORE.ToString("#.00");
         }
         else
         {
@@ -338,4 +375,16 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         }
     }
 
+    string noDecimalFormat(double x)
+    {
+        string ret = x.ToString("#");
+        if (ret.Length < 1)
+        {
+            return "0";
+        }
+        else
+        {
+            return ret;
+        }
+    }
 }
