@@ -103,7 +103,6 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     void Update()
     {
-        won = true;
         updateIndicator();
 
         var newPos = epicBasePos;
