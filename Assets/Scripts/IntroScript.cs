@@ -17,7 +17,7 @@ public class IntroScript : MonoBehaviour
 
     void Update()
     {   
-        if (Input.GetKeyUp("right enter") || Input.GetKeyUp("left enter"))
+        if (Input.anyKey)
         {
             SceneManager.LoadScene(1);
         }

@@ -103,6 +103,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     void Update()
     {
+        won = true;
         updateIndicator();
 
         var newPos = epicBasePos;
@@ -111,7 +112,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         newPos.z = newPos.z + Random.Range(-jitterAmount, jitterAmount);
         epicTextGameObjec.transform.localPosition = newPos;
 
-        if (won && (Input.GetKeyUp("right enter") || Input.GetKeyUp("left enter")))
+        if (won && (Input.GetKeyUp("enter") || Input.GetKeyUp("return")))
         {
             SceneManager.LoadScene(0);
         }
