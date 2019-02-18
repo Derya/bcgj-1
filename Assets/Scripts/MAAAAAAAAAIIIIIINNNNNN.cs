@@ -99,6 +99,9 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         pattyDisplay.SetActive(false);
         lettuceDisplay.SetActive(false);
         bunTopDisplay.SetActive(false);
+
+        predictionLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        predictionLineRenderer.SetColors(Color.blue, Color.blue);
     }
 
     void Update()
@@ -181,12 +184,12 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     }
 
     void drawLine(Vector3 position, Vector3 velocity, Vector3 acceleration) {
-        LineRenderer line = predictionLineRenderer;
 
         int verts = 2000;
+        var skip = 20;
         float timeStep = 0.01f;
 
-        line.positionCount = verts;
+        predictionLineRenderer.positionCount = verts - skip;
 
         var velTemp = velocity;
         var positionTemp = position;
@@ -195,7 +198,10 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             velTemp += acceleration * timeStep;
             positionTemp += velTemp * timeStep;
 
-            line.SetPosition(i, positionTemp);
+            if (i >= skip)
+            {
+                predictionLineRenderer.SetPosition(i - skip, positionTemp);
+            }
         }
     }
 
@@ -399,7 +405,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             won = true;
             currTarget = null;
             FINAL_SCORE = (TOTAL_SCORE / TOTAL_TIME) + Mathf.Clamp((60f - (float) TOTAL_TIME), 0, 60);
-            epic_text.text = "YOU WIN! SCORE: " + FINAL_SCORE.ToString("#.00") + " PRESS ENTER TO PLAY AGAIN";
+            epic_text.text = "YOU WIN! SCORE: " + FINAL_SCORE.ToString("#") + "\n(PRESS ENTER)";
         }
         else
         {
