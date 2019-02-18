@@ -138,7 +138,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         var deltaTime = Time.fixedDeltaTime;
 
         var emissionSubsystem = otherParticles.emission;
-        if (Input.GetKey("left shift"))
+        if (Input.GetKey("left shift") || Input.GetKey("right shift"))
         {
             rigidBody.AddRelativeForce(Vector3.forward * thrustFactor);
             emissionSubsystem.rateOverTime = 100;
