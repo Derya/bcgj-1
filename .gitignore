@@ -8,6 +8,10 @@
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
 
+# Never ignore windows build
+!WINDOWS_BUILD/*
+!WINDOWS_BUILD/**/*
+
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # [Aa]ssets/AssetStoreTools*
 
