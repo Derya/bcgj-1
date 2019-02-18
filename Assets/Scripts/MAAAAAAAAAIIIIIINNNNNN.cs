@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
     GameObject lettuceDisplay;
     [SerializeField]
     GameObject bunTopDisplay;
+    [SerializeField]
+    LineRenderer predictionLineRenderer;
 
     int hasBunBottom;
     int hasCheese;
@@ -80,6 +83,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
 
     void Start()
     {
+
         currTarget = bunBottom;
 
         rigidBody = GetComponent<Rigidbody>();
@@ -106,6 +110,11 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         newPos.y = newPos.y + Random.Range(-jitterAmount, jitterAmount);
         newPos.z = newPos.z + Random.Range(-jitterAmount, jitterAmount);
         epicTextGameObjec.transform.localPosition = newPos;
+
+        if (won && (Input.GetKeyUp("right enter") || Input.GetKeyUp("left enter")))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     float last_s_up = -100;
@@ -128,12 +137,16 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
         var emissionSubsystem = otherParticles.emission;
         if (Input.GetKey("left shift"))
         {
-            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor * 1);
+            rigidBody.AddRelativeForce(Vector3.forward * thrustFactor);
             emissionSubsystem.rateOverTime = 100;
+
+
+            drawLine(transform.position, rigidBody.velocity, transform.forward.normalized * thrustFactor * 1f);
         }
         else
         {
             emissionSubsystem.rateOverTime = 0;
+            drawLine(transform.position, rigidBody.velocity, Vector3.zero);
         }
 
         if (Input.GetKey("space"))
@@ -164,6 +177,25 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             //}
 
             handleStandardRotations();
+        }
+    }
+
+    void drawLine(Vector3 position, Vector3 velocity, Vector3 acceleration) {
+        LineRenderer line = predictionLineRenderer;
+
+        int verts = 2000;
+        float timeStep = 0.01f;
+
+        line.positionCount = verts;
+
+        var velTemp = velocity;
+        var positionTemp = position;
+        for (var i = 0; i < verts; i++)
+        {
+            velTemp += acceleration * timeStep;
+            positionTemp += velTemp * timeStep;
+
+            line.SetPosition(i, positionTemp);
         }
     }
 
@@ -367,7 +399,7 @@ public class MAAAAAAAAAIIIIIINNNNNN : MonoBehaviour
             won = true;
             currTarget = null;
             FINAL_SCORE = (TOTAL_SCORE / TOTAL_TIME) + Mathf.Clamp((60f - (float) TOTAL_TIME), 0, 60);
-            epic_text.text = "YOU WIN! SCORE: " + FINAL_SCORE.ToString("#.00");
+            epic_text.text = "YOU WIN! SCORE: " + FINAL_SCORE.ToString("#.00") + " PRESS ENTER TO PLAY AGAIN";
         }
         else
         {

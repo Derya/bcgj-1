@@ -43463,6 +43463,11 @@ PrefabInstance:
       propertyPath: bunTop
       value: 
       objectReference: {fileID: 1430177531}
+    - target: {fileID: 7785043469782044865, guid: 7810e7a4c4c35441aa5904f9a9dc1ccb,
+        type: 3}
+      propertyPath: predictionLineRenderer
+      value: 
+      objectReference: {fileID: 1871521553}
     - target: {fileID: 4113746700129677812, guid: 7810e7a4c4c35441aa5904f9a9dc1ccb,
         type: 3}
       propertyPath: m_Mesh
@@ -54392,6 +54397,12 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!120 &1871521553 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 7849069506486088554, guid: 7810e7a4c4c35441aa5904f9a9dc1ccb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1509125604}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1871695290 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1001501290393367259, guid: d4be846dc212c084784eaa7293e45b12,

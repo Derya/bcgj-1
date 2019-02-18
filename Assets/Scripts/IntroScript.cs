@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class IntroScript : MonoBehaviour
 {
@@ -15,7 +16,13 @@ public class IntroScript : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        if (Input.GetKeyUp("right enter") || Input.GetKeyUp("left enter"))
+        {
+            SceneManager.LoadScene(1);
+        }
+
         rect = new Rect(0, 0, Screen.width, Screen.height);
+
     }
 }
